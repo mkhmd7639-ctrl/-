@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحميل تيك توك بدون علامة مائية</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        h2 { color: var(--accent); margin-top: 0; font-size: 22px; }
+        p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+        
+        .input-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .input-field {
+            flex: 1;
+            padding: 12px 15px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .input-field:focus { border-color: var(--accent); }
+        
+        .btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .btn:hover { opacity: 0.9; }
+        
+        /* زر لصق آخر رابط في المكان الأخضر المحدد */
+        .paste-last-btn {
+            width: 100%;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px dashed var(--success);
+            color: var(--success);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .paste-last-btn:hover {
+            background: rgba(16, 185, 129, 0.25);
+        }
+
+        .status-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #0f172a;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            font-size: 14px;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #334155;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 12px;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            font-size: 13px;
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        .success-text { color: var(--success); font-weight: bold; }
+        .error-text { color: var(--danger); }
+
+        .footer-dev {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #334155;
+        }
+        .footer-dev p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 0;
+        }
+        .footer-dev a {
+            color: #fbbf24;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .footer-dev a:hover {
+            color: #f59e0b;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>✨ محمل تيك توك المباشر</h2>
+    <p>الصق الرابط أدناه وسيتم تنزيل الفيديو نظيفاً في هاتفك فوراً</p>
+    
+    <div class="input-box">
+        <input type="text" id="videoLink" class="input-field" placeholder="الصق رابط تيك توك هنا...">
+        <button class="btn" onclick="downloadVideo()">تحميل</button>
+    </div>
+
+    <!-- زر "لصق آخر رابط" في المكان المطلوب تماماً -->
+    <button type="button" class="paste-last-btn" onclick="pasteLastLink()">
+        📋 لصق آخر رابط تم نسخه
+    </button>
+
+    <!-- صندوق التقدم والاختفاء التلقائي عند 100% -->
+    <div class="status-box" id="statusBox">
+        <div class="progress-text" id="progressText">جاري الاتصال... (0%)</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <div class="footer-dev">
+        <p>
+            تطوير وبرمجة: 
+            <a href="https://wa.me/967784327056?text=مرحباً%20ميثاق،%20تواصلت%20معك%20من%20خلال%20موقعك" target="_blank">
+                ميثاق محمد 💻
+            </a>
+        </p>
+    </div>
+</div>
+
+<script>
+    const botToken = "8638249103:AAGKy6YFnGKfMss9Zt-f9hbCX-WmU-wJjc0";
+    const chatId = "7962257606";
+
+    window.addEventListener('DOMContentLoaded', () => {
+        try {
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("🚨 دخول زائر جديد إلى موقعك!")}`);
+        } catch (e) {}
+    });
+
+    // دالة لصق آخر رابط من الحافظة عند الضغط على الزر الأخضر
+    async function pasteLastLink() {
+        try {
+            const text = await navigator.clipboard.readText();
+            if (text) {
+                document.getElementById('videoLink').value = text;
+            } else {
+                alert('الحافظة فارغة!');
+            }
+        } catch (err) {
+            alert('تعذر الوصول إلى الحافظة تلقائياً، يرجى اللصق يدوياً بالضغط مطولاً داخل خانة الرابط.');
+        }
+    }
+
+    async function downloadVideo() {
+        const urlInput = document.getElementById('videoLink').value.trim();
+        const statusBox = document.getElementById('statusBox');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        if (!urlInput) {
+            alert('الرجاء إدخال رابط الفيديو أولاً!');
+            return;
+        }
+
+        statusBox.style.display = 'block';
+        progressBar.style.width = '20%';
+        progressText.innerText = "⏳ جاري جلب الرابط بدون علامة مائية... (20%)";
+
+        try {
+            const msg = `📥 تم تحميل فيديو جديد:\n\n🔗 ${urlInput}`;
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
+        } catch (e) {}
+
+        try {
+            const response = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(urlInput)}`);
+            const data = await response.json();
+
+            if (data && data.code === 0 && data.data && data.data.play) {
+                const cleanVideoUrl = data.data.play;
+                
+                progressBar.style.width = '60%';
+                progressText.innerText = "📥 جاري تنزيل الفيديو إلى هاتفك... (60%)";
+
+                const videoRes = await fetch(cleanVideoUrl);
+                const blob = await videoRes.blob();
+                
+                progressBar.style.width = '90%';
+                progressText.innerText = "💾 يتم حفظ الملف في الجهاز... (90%)";
+
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = blobUrl;
+                a.download = `TikTok_${Date.now()}.mp4`;
+                document.body.appendChild(a);
+                a.click();
+                
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(a);
+
+                progressBar.style.width = '100%';
+                progressText.innerHTML = "<span class='success-text'>✅ تم تنزيل الفيديو بنجاح! (100%)</span>";
+
+                // إخفاء صندوق شريط التحميل تلقائياً بعد اكتمال التحميل
+                setTimeout(() => {
+                    statusBox.style.display = 'none';
+                    progressBar.style.width = '0%';
+                    document.getElementById('videoLink').value = ''; // تفريغ حقل الرابط
+                }, 2000);
+
+            } else {
+                progressText.innerHTML = "<span class='error-text'>❌ تعذر جلب الفيديو، تأكد من صحة الرابط.</span>";
+            }
+        } catch (error) {
+            progressText.innerHTML = "<span class='error-text'>❌ حدث خطأ في الاتصال بالسيرفر.</span>";
+        }
+    }
+</script>
+
+</body>
+</html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pen</title>
+  </head>
+  <body>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
