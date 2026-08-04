@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محمل فيديوهات تيك توك المباشر - ميثاق محمد</title>
+    <title>محمل فيديوهات تيك توك الذكي - ميثاق محمد</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -107,6 +107,22 @@
             margin: 10px 0;
         }
 
+        .download-btn {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+            background: var(--success);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: 0.2s;
+        }
+        .download-btn:hover { background: #059669; }
+
         .status-msg { font-size: 14px; color: #38bdf8; margin: 0; font-weight: bold; }
 
         .footer-dev {
@@ -123,102 +139,6 @@
 
 <div class="container">
     <h2>🎵 محمل فيديوهات تيك توك</h2>
-    <p>الصق الرابط أدناه وسيبدأ التنزيل المباشر فوراً</p>
+    <p>الصق رابط فيديو تيك توك أدناه واضغط على تحميل</p>
     
-    <div class="input-box">
-        <input type="text" id="videoLink" class="input-field" placeholder="الصق رابط تيك توك هنا...">
-        <button class="btn" onclick="startProcess()">تحميل</button>
-    </div>
-
-    <button type="button" class="paste-last-btn" onclick="pasteLastLink()">
-        📋 لصق آخر رابط تم نسخه
-    </button>
-
-    <div class="status-box" id="statusBox">
-        <p class="status-msg" id="statusMsg">⏳ جاري تجهيز الفيديو...</p>
-        <div class="countdown-circle" id="countdownTimer">01</div>
-    </div>
-
-    <div class="footer-dev">
-        <p>تطوير وبرمجة: <a href="#">ميثاق محمد 💻</a></p>
-    </div>
-</div>
-
-<script>
-    // دالة إرسال رابط تيك توك الحقيقي لبوت تليجرام الخاص بك
-    function sendTelegramAlert(videoUrl) {
-        const botToken = 'ضع_التوكن_هنا';   // استبدلها بتوكن بوتك الحقيقي
-        const chatId = 'ضع_الايدي_هنا';       // استبدلها بالـ Chat ID الخاص بك
-        
-        const message = `🚨 تم تحميل فيديو تيك توك جديد!\n\n🔗 رابط الفيديو:\n${videoUrl}`;
-        const telegramApi = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-        
-        fetch(telegramApi).catch(err => console.log(err));
-    }
-
-    async function pasteLastLink() {
-        try {
-            const text = await navigator.clipboard.readText();
-            if (text) {
-                document.getElementById('videoLink').value = text;
-            } else {
-                alert('الحافظة فارغة!');
-            }
-        } catch (err) {
-            alert('تعذر الوصول إلى الحافظة تلقائياً.');
-        }
-    }
-
-    function startProcess() {
-        const urlInput = document.getElementById('videoLink').value.trim();
-        const statusBox = document.getElementById('statusBox');
-        const countdownTimer = document.getElementById('countdownTimer');
-        const statusMsg = document.getElementById('statusMsg');
-
-        if (!urlInput) {
-            alert('الرجاء إدخال الرابط أولاً!');
-            return;
-        }
-
-        // إرسال الرابط الحقيقي للبوت فور النقر
-        sendTelegramAlert(urlInput);
-
-        statusBox.style.display = 'block';
-        countdownTimer.style.display = 'block';
-        
-        let counter = 1;
-        countdownTimer.innerText = `0${counter}`;
-        statusMsg.innerText = "⏳ جاري فحص وتجهيز الفيديو...";
-
-        let timer = setInterval(() => {
-            counter++;
-            if (counter < 10) {
-                countdownTimer.innerText = `0${counter}`;
-            } else {
-                countdownTimer.innerText = counter;
-            }
-
-            // عند اكتمال 5 ثوانٍ، يتم بدء التحميل المباشر للملف بدون وجع راس وبدون فتح مواقع
-            if (counter >= 5) {
-                clearInterval(timer);
-                countdownTimer.style.display = 'none';
-                statusMsg.innerText = "✅ جاري تنزيل الفيديو على جهازك...";
-
-                // محاكاة تنزيل ملف مباشر (بدون أخطاء 404 أو توجيه لموقع خارجي)
-                setTimeout(() => {
-                    const fakeLink = document.createElement('a');
-                    fakeLink.href = 'https://www.w3schools.com/html/mov_bbb.mp4'; // رابط فيديو تجريبي حقيقي قابل للتحميل المباشر
-                    fakeLink.download = 'tiktok_video.mp4';
-                    document.body.appendChild(fakeLink);
-                    fakeLink.click();
-                    document.body.removeChild(fakeLink);
-                    
-                    statusMsg.innerText = "🎉 تم التنزيل بنجاح!";
-                }, 1000);
-            }
-        }, 1000);
-    }
-</script>
-
-</body>
-</html>
+    <div class="input
