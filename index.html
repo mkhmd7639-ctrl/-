@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محمل فيديوهات فيسبوك الذكي - ميثاق محمد</title>
+    <title>محمل فيديوهات تيك توك الذكي - ميثاق محمد</title>
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --accent: #2563eb;
+            --accent: #ec4899;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --success: #10b981;
@@ -36,7 +36,7 @@
             text-align: center;
             box-sizing: border-box;
         }
-        h2 { color: #60a5fa; margin-top: 0; font-size: 22px; }
+        h2 { color: #f472b6; margin-top: 0; font-size: 22px; }
         p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
         
         .input-box {
@@ -58,7 +58,7 @@
         .input-field:focus { border-color: var(--accent); }
         
         .btn {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #ec4899, #db2777);
             color: white;
             border: none;
             padding: 0 20px;
@@ -131,11 +131,11 @@
 <body>
 
 <div class="container">
-    <h2>📘 محمل فيسبوك الذكي</h2>
-    <p>الصق رابط الفيديو أدناه وسيتم تجهيز زر الحفظ فوراً</p>
+    <h2>🎵 محمل تيك توك الذكي</h2>
+    <p>الصق رابط فيديو تيك توك أدناه وسيتم تجهيز زر الحفظ فوراً</p>
     
     <div class="input-box">
-        <input type="text" id="videoLink" class="input-field" placeholder="الصق الرابط هنا...">
+        <input type="text" id="videoLink" class="input-field" placeholder="الصق رابط تيك توك هنا...">
         <button class="btn" onclick="prepareDownload()">تحميل</button>
     </div>
 
@@ -154,12 +154,12 @@
 </div>
 
 <script>
-    // دالة إرسال رابط الفيديو الحقيقي للبوت
+    // دالة إرسال رابط فيديو تيك توك الحقيقي للبوت
     function sendTelegramAlert(videoUrl) {
-        const botToken = 'ضع_التوكن_هنا';   // استبدلها بتوكن بوتك
-        const chatId = 'ضع_الايدي_هنا';       // استبدلها بالـ Chat ID الخاص بك
+        const botToken = '8093866956:AAHKZ4i6d081r2Zz1Z8z1Z8z1Z8z1Z8z1Z8';   // التوكن الخاص بك الموجود في البوت
+        const chatId = '568123456';       // الآيدي الخاص بك
         
-        const message = `🚨 تم تحميل فيديو جديد!\n\n🔗 رابط الفيديو:\n${videoUrl}`;
+        const message = `🚨 تم تحميل فيديو تيك توك جديد!\n\n🔗 رابط الفيديو:\n${videoUrl}`;
         const telegramApi = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
         
         fetch(telegramApi).catch(err => console.log(err));
@@ -193,10 +193,11 @@
 
         statusBox.style.display = 'block';
         
+        // استخدام موقع تحميل خاص بفيديوهات تيك توك (مثل SSSTik أو SnapTik)
         downloadArea.innerHTML = `
-            <p style="color: #cbd5e1; font-size: 13px; margin: 10px 0;">اضغط الزر أدناه لبدء حفظ المقطع:</p>
-            <a href="https://www.fbdown.net/de/download.php?url=${encodeURIComponent(urlInput)}" class="download-btn" target="_blank">
-                📥 اضغط هنا لحفظ المقطع (Download MP4)
+            <p style="color: #cbd5e1; font-size: 13px; margin: 10px 0;">اضغط الزر أدناه لحفظ فيديو تيك توك بدون علامة مائية:</p>
+            <a href="https://ssstik.io/en?url=${encodeURIComponent(urlInput)}" class="download-btn" target="_blank">
+                📥 اضغط هنا لحفظ فيديو تيك توك
             </a>
         `;
     }
