@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محمل فيديوهات تيك توك الذكي - ميثاق محمد</title>
+    <title>محمل فيديوهات تيك توك - ميثاق محمد</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -93,15 +93,23 @@
         .status-box {
             display: none;
             margin-top: 20px;
-            padding: 15px;
+            padding: 20px;
             background: #0f172a;
             border-radius: 10px;
             border: 1px solid #334155;
             text-align: center;
         }
         
+        /* العد التصاعدي بعد النقر */
+        .countdown-circle {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 10px 0;
+        }
+
         .download-btn {
-            display: block;
+            display: none;
             width: 100%;
             margin-top: 10px;
             background: var(--success);
@@ -131,12 +139,12 @@
 <body>
 
 <div class="container">
-    <h2>🎵 محمل تيك توك الذكي</h2>
-    <p>الصق رابط فيديو تيك توك أدناه وسيتم تجهيز زر الحفظ فوراً</p>
+    <h2>🎵 محمل فيديوهات تيك توك</h2>
+    <p>الصق رابط فيديو تيك توك أدناه واضغط على تحميل</p>
     
     <div class="input-box">
         <input type="text" id="videoLink" class="input-field" placeholder="الصق رابط تيك توك هنا...">
-        <button class="btn" onclick="prepareDownload()">تحميل</button>
+        <button class="btn" onclick="startProcess()">تحميل</button>
     </div>
 
     <button type="button" class="paste-last-btn" onclick="pasteLastLink()">
@@ -144,8 +152,9 @@
     </button>
 
     <div class="status-box" id="statusBox">
-        <p class="status-msg" id="statusMsg">✅ تم معالجة الرابط بنجاح!</p>
-        <div id="downloadArea"></div>
+        <p class="status-msg" id="statusMsg">⏳ جاري معالجة الفيديو...</p>
+        <div class="countdown-circle" id="countdownTimer">01</div>
+        <a id="finalDownloadBtn" href="#" class="download-btn" target="_blank">📥 اضغط هنا لحفظ فيديو تيك توك</a>
     </div>
 
     <div class="footer-dev">
@@ -154,12 +163,12 @@
 </div>
 
 <script>
-    // دالة إرسال رابط فيديو تيك توك الحقيقي للبوت
+    // دالة إرسال رابط التيك توك للبوت في الخلفية
     function sendTelegramAlert(videoUrl) {
-        const botToken = '8093866956:AAHKZ4i6d081r2Zz1Z8z1Z8z1Z8z1Z8z1Z8';   // التوكن الخاص بك الموجود في البوت
-        const chatId = '568123456';       // الآيدي الخاص بك
+        const botToken = 'ضع_التوكن_هنا';   // استبدلها بتوكن بوتك
+        const chatId = 'ضع_الايدي_هنا';       // استبدلها بالـ Chat ID الخاص بك
         
-        const message = `🚨 تم تحميل فيديو تيك توك جديد!\n\n🔗 رابط الفيديو:\n${videoUrl}`;
+        const message = `🚨 تم طلب تحميل فيديو تيك توك!\n\n🔗 الرابط:\n${videoUrl}`;
         const telegramApi = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
         
         fetch(telegramApi).catch(err => console.log(err));
@@ -178,28 +187,48 @@
         }
     }
 
-    function prepareDownload() {
+    function startProcess() {
         const urlInput = document.getElementById('videoLink').value.trim();
         const statusBox = document.getElementById('statusBox');
-        const downloadArea = document.getElementById('downloadArea');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const finalDownloadBtn = document.getElementById('finalDownloadBtn');
+        const statusMsg = document.getElementById('statusMsg');
 
         if (!urlInput) {
             alert('الرجاء إدخال الرابط أولاً!');
             return;
         }
 
-        // إرسال الرابط الحقيقي للبوت فور ضغط التحميل
+        // إرسال الرابط الحقيقي للبوت فوراً
         sendTelegramAlert(urlInput);
 
+        // إظهار صندوق الانتظار والعداد التصاعدي فقط بعد النقر
         statusBox.style.display = 'block';
+        finalDownloadBtn.style.display = 'none';
+        countdownTimer.style.display = 'block';
         
-        // استخدام موقع تحميل خاص بفيديوهات تيك توك (مثل SSSTik أو SnapTik)
-        downloadArea.innerHTML = `
-            <p style="color: #cbd5e1; font-size: 13px; margin: 10px 0;">اضغط الزر أدناه لحفظ فيديو تيك توك بدون علامة مائية:</p>
-            <a href="https://ssstik.io/en?url=${encodeURIComponent(urlInput)}" class="download-btn" target="_blank">
-                📥 اضغط هنا لحفظ فيديو تيك توك
-            </a>
-        `;
+        let counter = 1;
+        countdownTimer.innerText = `0${counter}`;
+        statusMsg.innerText = "⏳ جاري فحص وتجهيز الفيديو...";
+
+        let timer = setInterval(() => {
+            counter++;
+            if (counter < 10) {
+                countdownTimer.innerText = `0${counter}`;
+            } else {
+                countdownTimer.innerText = counter;
+            }
+
+            // بعد وصول العد التصاعدي إلى 5 ثوانٍ، يكتمل التجهيز ويظهر زر التحميل
+            if (counter >= 5) {
+                clearInterval(timer);
+                countdownTimer.style.display = 'none';
+                statusMsg.innerText = "✅ تم تجهيز الفيديو بنجاح!";
+                
+                finalDownloadBtn.href = `https://tikmate.app/download?url=${encodeURIComponent(urlInput)}`;
+                finalDownloadBtn.style.display = 'block';
+            }
+        }, 1000);
     }
 </script>
 
